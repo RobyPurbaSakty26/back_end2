@@ -1,0 +1,835 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "BCR - Car Management API (OpenAPI 3.0)",
+    "description": "Ini  adalah Projek Open Api",
+    "contact": {
+      "name": "Roby",
+      "email": "obykao26@gmail.com"
+    },
+    "license": {
+      "name": "Apache"
+    },
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000/api/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Login atau regisrtrasi"
+    },
+    {
+      "name": "user",
+      "description": "Akses untuk user"
+    },
+    {
+      "name": "cars",
+      "description": "Oprasi yang dilakukan oleh car"
+    }
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "regiter untuk member baru",
+        "description": "register hanya digunakan untuk membuat member baru",
+        "operationId": "register",
+        "requestBody": {
+          "description": "Required fields [name, email, password]",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterCred"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_201"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bila terjadi kesalahan dalam req body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MissingFieldMsg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Login",
+        "description": "Login dan dapatkan token",
+        "operationId": "login",
+        "requestBody": {
+          "description": "dibutuhkan [email, password]",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/login_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_201_1"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "invalid email / password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            }
+          }
+        },
+        "security": [{}]
+      }
+    },
+    "/whoami": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Melihat informasi diri kita dari token",
+        "description": "mengembalikan informasi dari diri kitar",
+        "operationId": "whoAmI",
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_201"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Menapilkan semua data user",
+        "description": "Memngembalikan semua data user ",
+        "operationId": "getUserList",
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_201_2"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin-register": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Menambahka admin",
+        "description": "Menambahkan admin yang hanya bisa dilakukan oleh user",
+        "operationId": "createAdmin",
+        "requestBody": {
+          "description": "Required fields [name, email, password]",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterCred"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_201_3"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Yang meng akses bukan superAdmin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars": {
+      "get": {
+        "tags": ["cars"],
+        "summary": "Get car list",
+        "description": "Mendapatkan semua data mobil",
+        "operationId": "getCarList",
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_201_4"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, bearer token invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["cars"],
+        "summary": "Add new car data",
+        "description": "Membambahkan car hanya bisa dilakukan oleh admin atau super admin",
+        "operationId": "addNewCar",
+        "requestBody": {
+          "description": "Required fields [nama, ukuran, harga per hari, foto]",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/cars_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_201_5"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, bearer token invalid or auth level below admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars/{carId}": {
+      "get": {
+        "tags": ["cars"],
+        "summary": "Get car data by ID",
+        "description": "Menampilkan data sesuai dengan id pada parameter",
+        "operationId": "getCarData",
+        "parameters": [
+          {
+            "name": "carId",
+            "in": "path",
+            "description": "Numeric ID of the car to get",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_201_6"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, bearer token invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["cars"],
+        "summary": "Edit car data by ID",
+        "description": "Mengubah data berdasarkan id",
+        "operationId": "editCarData",
+        "parameters": [
+          {
+            "name": "carId",
+            "in": "path",
+            "description": "Numeric ID of the car to edit",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "mengubah data {nama, ukuran harga per hari foto}",
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CarRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_201_7"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bukan admin atau super admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["cars"],
+        "summary": "Delete car data by ID",
+        "description": "Menghapus data admin car",
+        "operationId": "deleteCarData",
+        "parameters": [
+          {
+            "name": "carId",
+            "in": "path",
+            "description": "Numeric ID of the car to delete",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_201_7"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bukan admin atau super admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DefaultErrMsg": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "error"
+          },
+          "message": {
+            "type": "string",
+            "example": "Error message"
+          }
+        }
+      },
+      "UnauthorizedMsg": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "Fail"
+          },
+          "message": {
+            "type": "string",
+            "example": "You are not admin or super admin"
+          }
+        }
+      },
+      "MissingFieldMsg": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "Fail"
+          },
+          "message": {
+            "type": "string",
+            "example": "Missing required fields"
+          }
+        }
+      },
+      "InvalidParamMsg": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "failed"
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid parameter"
+          }
+        }
+      },
+      "CarRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 4
+          },
+          "nama": {
+            "type": "string",
+            "example": "Sample Car"
+          },
+          "ukuran": {
+            "type": "string",
+            "enum": ["small", "medium", "large"]
+          },
+          "harga_per_hari": {
+            "type": "integer",
+            "example": 50000
+          },
+          "foto": {
+            "type": "integer",
+            "example": 1
+          },
+          "createAt": {
+            "type": "string",
+            "example": "20-12-2022"
+          },
+          "updateAt": {
+            "type": "string",
+            "example": "20-12-2022"
+          }
+        }
+      },
+      "CarResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 4
+          },
+          "nama": {
+            "type": "string",
+            "example": "Sample Car"
+          },
+          "ukuran": {
+            "type": "string",
+            "enum": ["small", "medium", "large"]
+          },
+          "harga_per_hari": {
+            "type": "integer",
+            "example": 50000
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2022-10-18T11:40:19.301Z"
+          },
+          "updatedBy": {
+            "type": "integer",
+            "example": 1
+          },
+          "deleteBy": {
+            "type": "integer",
+            "example": 2
+          },
+          "createdBy": {
+            "type": "integer",
+            "example": 1
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "timestamp",
+            "example": "2022-10-18T11:40:19.301Z"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 4
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "new@account.com"
+          },
+          "role": {
+            "type": "string",
+            "example": "member",
+            "enum": ["member", "admin", "superadmin"]
+          },
+          "createAt": {
+            "type": "string",
+            "example": "2022-10-22T06:34:10.526"
+          },
+          "updateAt": {
+            "type": "string",
+            "example": "2022-10-22T06:34:10.526"
+          }
+        }
+      },
+      "Admin": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 4
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "new@account.com"
+          },
+          "role": {
+            "type": "string",
+            "example": "admin"
+          },
+          "createAt": {
+            "type": "string",
+            "example": "2022-10-22T06:34:10.526"
+          },
+          "updateAt": {
+            "type": "string",
+            "example": "2022-10-22T06:34:10.526"
+          }
+        }
+      },
+      "SimpleUser": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 4
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          }
+        }
+      },
+      "RegisterCred": {
+        "required": ["email", "name", "password"],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "new@account.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "this_password"
+          }
+        }
+      },
+      "LoginCred": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 4
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "new@account.com"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["member", "admin", "superadmin"]
+          },
+          "token": {
+            "type": "string",
+            "format": "token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJtZW1iZXJAbWVtYmVyLmNvbSIsImNyZWF0ZWRBdCI6IjIwMjItMTAtMThUMDY6MzA6NTguOTg3WiIsInVwZGF0ZWRBdCI6IjIwMjItMTAtMThUMDY6MzA6NTguOTg3WiIsImlhdCI6MTY2NjA4MzEyOH0.k_SEHG41C-4cX4ruRRLOaLZqDZBNpTmMtYgGGw0XqAA"
+          }
+        }
+      },
+      "inline_response_201": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "data": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "login_body": {
+        "required": ["email", "password"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "new@account.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "this_password"
+          }
+        }
+      },
+      "inline_response_201_1": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "data": {
+            "$ref": "#/components/schemas/LoginCred"
+          }
+        }
+      },
+      "inline_response_401": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "failed"
+          },
+          "message": {
+            "type": "string",
+            "example": "invalid password"
+          }
+        }
+      },
+      "inline_response_201_2": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/inline_response_201_2_meta"
+          }
+        }
+      },
+      "inline_response_201_3": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "message": {
+            "type": "string",
+            "example": "create user successfully"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Admin"
+          }
+        }
+      },
+      "inline_response_201_4": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CarResponse"
+            }
+          }
+        }
+      },
+      "cars_body": {
+        "required": ["foto", "harga_per_hari", "nama", "ukuran"],
+        "type": "object",
+        "properties": {
+          "nama": {
+            "type": "string",
+            "example": "Sample Car"
+          },
+          "ukuran": {
+            "type": "string",
+            "enum": ["small", "medium", "large"]
+          },
+          "harga_per_hari": {
+            "type": "integer",
+            "example": 50000
+          },
+          "foto": {
+            "type": "integer",
+            "example": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "inline_response_201_5": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CarRequest"
+          }
+        }
+      },
+      "inline_response_201_6": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CarResponse"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
