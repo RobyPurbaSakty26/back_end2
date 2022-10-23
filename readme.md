@@ -10,11 +10,11 @@ API documentation is available in two different formats:
 
 "name": "SuperAdmin",
 
+"email": "SuperAdmin@mail.com"
+
 "password": "SuperAdmin123",
 
 "role": "SuperAdmin",
-
-"email": "SuperAdmin@mail.com"
 
 ### Enkripsi
 

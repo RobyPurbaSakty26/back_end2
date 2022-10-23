@@ -129,7 +129,7 @@ module.exports = {
     const isAdminORSuperAdmin = role === 'SuperAdmin';
     if (!isAdminORSuperAdmin) {
       res.status(402).json({
-        message: 'You are not admin',
+        message: 'You are not Super admin',
       });
       return;
     }

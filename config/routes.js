@@ -14,18 +14,18 @@ const apiRouter = express.Router();
 apiRouter.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swgDoc));
 
 apiRouter.get('/api/v1/cars', controllers.api.v1.car.list);
-apiRouter.post('/api/v1/cars', controllers.api.v1.auth.authorize, controllers.api.v1.car.create);
-apiRouter.put('/api/v1/cars/:id', controllers.api.v1.auth.authorize, controllers.api.v1.car.update);
-apiRouter.delete('/api/v1/cars/:id', controllers.api.v1.auth.authorize, controllers.api.v1.car.destroy);
+apiRouter.post('/api/v1/cars', controllers.api.v1.auth.authorize, controllers.api.v1.auth.adminOrSuperAdmin, controllers.api.v1.car.create);
+apiRouter.put('/api/v1/cars/:id', controllers.api.v1.auth.authorize, controllers.api.v1.auth.adminOrSuperAdmin, controllers.api.v1.car.update);
+apiRouter.delete('/api/v1/cars/:id', controllers.api.v1.auth.authorize, controllers.api.v1.auth.adminOrSuperAdmin, controllers.api.v1.car.destroy);
 apiRouter.get('/api/v1/cars/:id', controllers.api.v1.car.show);
 
-// Autentication user
+// Add user
 apiRouter.post('/api/v1/register', controllers.api.v1.auth.register);
 apiRouter.post('/api/v1/admin-register', controllers.api.v1.auth.authorize, controllers.api.v1.auth.SuperAdmin, controllers.api.v1.auth.adminRegister);
 apiRouter.post('/api/v1/login', controllers.api.v1.auth.login);
 // user
 apiRouter.get('/api/v1/users', controllers.api.v1.auth.authorize, controllers.api.v1.auth.adminOrSuperAdmin, controllers.api.v1.auth.getAll);
-apiRouter.get('/api/v1/whoami', controllers.api.v1.auth.authorize, controllers.api.v1.auth.adminOrSuperAdmin, controllers.api.v1.auth.whoAmI);
+apiRouter.get('/api/v1/whoami', controllers.api.v1.auth.authorize, controllers.api.v1.auth.whoAmI);
 apiRouter.put('/api/v1/users/:id', controllers.api.v1.auth.authorize, controllers.api.v1.auth.adminOrSuperAdmin, controllers.api.v1.auth.update);
 apiRouter.get('/api/v1/users/:id', controllers.api.v1.auth.authorize, controllers.api.v1.auth.adminOrSuperAdmin, controllers.api.v1.auth.getDetail);
 apiRouter.delete('/api/v1/users/:id', controllers.api.v1.auth.authorize, controllers.api.v1.auth.adminOrSuperAdmin, controllers.api.v1.auth.delete);
