@@ -20,8 +20,8 @@ apiRouter.delete('/api/v1/cars/:id', controllers.api.v1.auth.authorize, controll
 apiRouter.get('/api/v1/cars/:id', controllers.api.v1.car.show);
 
 // Autentication user
-apiRouter.post('/api/v1/register', controllers.api.v1.auth.authorize, controllers.api.v1.auth.SuperAdmin, controllers.api.v1.auth.register);
-apiRouter.post('/api/v1/admin-register', controllers.api.v1.auth.adminRegister);
+apiRouter.post('/api/v1/register', controllers.api.v1.auth.register);
+apiRouter.post('/api/v1/admin-register', controllers.api.v1.auth.authorize, controllers.api.v1.auth.SuperAdmin, controllers.api.v1.auth.adminRegister);
 apiRouter.post('/api/v1/login', controllers.api.v1.auth.login);
 // user
 apiRouter.get('/api/v1/users', controllers.api.v1.auth.authorize, controllers.api.v1.auth.adminOrSuperAdmin, controllers.api.v1.auth.getAll);
